@@ -1,0 +1,18 @@
+#!/bin/sh
+
+case "$1" in
+# called when:
+#   debian: N/A
+#   centos: upgrade only
+2)
+
+  supervisorctl status student_server | grep RUNNING >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    supervisorctl stop student_server
+  fi
+  supervisorctl remove student_server
+
+  ;;
+esac
+
+exit 0

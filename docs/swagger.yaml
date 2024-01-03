@@ -1,0 +1,496 @@
+basePath: /api
+definitions:
+  adminapi.JSONResult:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  adminapi.User:
+    properties:
+      address: {}
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  model.BaseResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  model.ChangeStudentRequest:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      id:
+        type: integer
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  model.ChangeTagRequest:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+    type: object
+  model.CreateStudentRequest:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      gender:
+        description: male｜female
+        type: string
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  model.CreateTagRequest:
+    properties:
+      content:
+        type: string
+      label:
+        type: string
+    type: object
+  model.ExportStudentRequest:
+    properties:
+      columns:
+        items:
+          type: string
+        type: array
+      query:
+        $ref: '#/definitions/model.QueryStudentRequest'
+    type: object
+  model.LoginRequest:
+    properties:
+      is_registe:
+        description: 用于标记在没有账户时，登录并且注册账户
+        type: boolean
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.QueryStudentRequest:
+    properties:
+      gender:
+        type: string
+      limit:
+        type: integer
+      offset:
+        type: integer
+      search_word:
+        type: string
+      tags:
+        type: string
+    type: object
+  model.QueryTagResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.TagDb'
+        type: array
+      total_count:
+        type: integer
+    type: object
+  model.StudentInfo:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      create_time:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      update_time:
+        type: string
+    type: object
+  model.TagDb:
+    properties:
+      content:
+        type: string
+      count:
+        type: integer
+      create_time:
+        type: string
+      id:
+        type: integer
+      label:
+        type: string
+      update_time:
+        type: string
+    type: object
+  model.UserResponse:
+    properties:
+      menus:
+        description: 可用菜单
+        items:
+          type: string
+        type: array
+      token:
+        type: string
+      username:
+        type: string
+    type: object
+host: 127.0.0.1:9999
+info:
+  contact:
+    email: support@swagger.io
+    name: saxon
+    url: http://www.swagger.io/support
+  description: 学生管理系统API文档
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: 学生管理系统
+  version: "1.0"
+paths:
+  /v1/dupuser:
+    get:
+      consumes:
+      - application/json;charset=utf-8
+      description: 查询用户是否已存在
+      parameters:
+      - description: 用户姓名
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+        "400":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 重名用户
+      tags:
+      - 用户管理
+  /v1/login:
+    post:
+      consumes:
+      - application/json;charset=utf-8
+      description: 登录接口
+      parameters:
+      - description: 登录接口参数
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.UserResponse'
+              type: object
+      summary: 登录接口
+      tags:
+      - 用户管理
+  /v1/user:
+    get:
+      consumes:
+      - application/json
+      description: 用户信息
+      parameters:
+      - description: 账号名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/adminapi.JSONResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/adminapi.User'
+              type: object
+        "400":
+          description: desc
+          schema:
+            $ref: '#/definitions/adminapi.JSONResult'
+      summary: 用户信息
+      tags:
+      - 用户管理
+  /v2/student:
+    get:
+      consumes:
+      - application/json;charset=utf-8
+      description: 查询学生列表
+      parameters:
+      - description: 关键字查询
+        in: query
+        name: search_word
+        type: string
+      - description: 页数
+        in: query
+        name: limit
+        type: integer
+      - description: 页码
+        in: query
+        name: offset
+        type: integer
+      - description: 按性别查询
+        in: query
+        name: gender
+        type: string
+      - collectionFormat: csv
+        description: 按标签查询
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.BaseResponse'
+            - properties:
+                data:
+                  properties:
+                    list:
+                      items:
+                        $ref: '#/definitions/model.StudentInfo'
+                      type: array
+                    total_count:
+                      type: integer
+                  type: object
+              type: object
+      summary: 查询学生列表
+      tags:
+      - 学生管理
+    post:
+      consumes:
+      - application/json;charset=utf-8
+      description: 新建学生
+      parameters:
+      - description: 新建学生参数
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateStudentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 新建学生
+      tags:
+      - 学生管理
+    put:
+      consumes:
+      - application/json;charset=utf-8
+      description: 修改学生
+      parameters:
+      - description: 修改学生信息
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangeStudentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 修改学生
+      tags:
+      - 学生管理
+  /v2/student/:id:
+    delete:
+      consumes:
+      - application/json;charset=utf-8
+      description: 删除学生列表
+      parameters:
+      - description: 删除学生
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 删除学生列表
+      tags:
+      - 学生管理
+  /v2/student/export:
+    post:
+      consumes:
+      - application/json;charset=utf-8
+      description: 导出学生列表
+      parameters:
+      - description: 关键字查询
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExportStudentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            type: string
+      summary: 导出学生列表
+      tags:
+      - 学生管理
+  /v2/tag:
+    get:
+      consumes:
+      - application/json;charset=utf-8
+      description: 查询标签列表
+      parameters:
+      - description: 关键字查询
+        in: query
+        name: search_word
+        type: string
+      - description: 页数
+        in: query
+        name: limit
+        type: integer
+      - description: 页码
+        in: query
+        name: offset
+        type: integer
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.QueryTagResponse'
+              type: object
+      summary: 查询标签列表
+      tags:
+      - 标签管理
+    patch:
+      consumes:
+      - application/json;charset=utf-8
+      description: 修改标签
+      parameters:
+      - description: 查询标签接口参数
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangeTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 修改标签
+      tags:
+      - 标签管理
+    post:
+      consumes:
+      - application/json;charset=utf-8
+      description: 新建标签
+      parameters:
+      - description: 查询标签接口参数
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 新建标签
+      tags:
+      - 标签管理
+  /v2/tag/:id:
+    delete:
+      consumes:
+      - application/json;charset=utf-8
+      description: 删除标签列表
+      parameters:
+      - description: 删除标签
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/model.BaseResponse'
+      summary: 删除标签列表
+      tags:
+      - 标签管理
+swagger: "2.0"

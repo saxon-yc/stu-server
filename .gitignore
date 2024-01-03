@@ -1,0 +1,4 @@
+vendor/*
+deb/*
+bin/*
+config/*.yaml

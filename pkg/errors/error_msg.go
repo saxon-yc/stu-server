@@ -1,0 +1,21 @@
+package errorcode
+
+const (
+	APP_REQUEST_FAILED_MSG        = "请求失败"
+	APP_REQUEST_TIMEOUT_MSG       = "请求超时"
+	APP_REPONSE_FAILED_MSG        = "响应失败"
+	APP_REPONSE_DOCODE_FAILED_MSG = "响应解码失败"
+
+	DB_CREATE_FAILED_MSG = "数据库创建数据失败"
+	DB_QUERY_FAILED_MSG  = "数据库查询数据失败"
+	DB_UPDATE_FAILED_MSG = "数据库更新数据失败"
+	DB_DELETE_FAILED_MSG = "数据库删除数据失败"
+
+	INVALID_PERMISSION_FAILED_MSG = "没有访问权限"
+	INVALID_PASSWORD_FAILED_MSG   = "密码错误"
+	INVALID_ACCOUNT_EXISTED_MSG   = "账户已存在"
+	INVALID_ACCOUNT_CREATED_MSG   = "账户创建失败"
+	INVALID_ACCOUNT_NOT_FOUND_MSG = "账户不存在"
+
+	UNKOWN_ERROR_MSG = "Unkown"
+)

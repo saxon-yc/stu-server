@@ -1,0 +1,12 @@
+Package: student-server
+Version: 1.0
+Architecture: amd64
+Maintainer: ssh
+Pre-Depends:
+Recommends:
+Suggests:
+Section: devel
+Priority: optional
+Multi-Arch: foreign
+Homepage: 
+Description: student-server
