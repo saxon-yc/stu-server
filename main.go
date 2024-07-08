@@ -3,8 +3,9 @@ package main
 import (
 	"student-server/config"
 	"student-server/internal/dbsvc"
-	router "student-server/internal/router"
+	"student-server/internal/router"
 	"student-server/internal/websvc"
+	"student-server/locales"
 
 	"github.com/spf13/viper"
 )
@@ -33,4 +34,9 @@ func main() {
 	webService := websvc.NewWebService(basicService)
 	r := router.NewRouter(basicService, webService)
 	r.Run(viper.GetString("router.addr"))
+
+	// 测试国际化
+	locales.NewLocalizer("en")
+	test_text := locales.GetTranslatedMessage("MasterMasterNodeNumNotMatch2")
+	println(test_text)
 }

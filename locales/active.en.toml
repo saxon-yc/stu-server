@@ -1,0 +1,9 @@
+[QKEVersionRemoved]
+other = "QKE version %s has been removed from the shelves. Please select a new QKE version."
+
+
+[MasterMasterNodeNumNotMatch1]
+other = "The cluster requires at least %d master nodes, the current number is %d"
+
+[MasterMasterNodeNumNotMatch2]
+other = "The number of cluster master nodes should be 1 or 3, the current number is %d"

@@ -1,0 +1,8 @@
+[QKEVersionRemoved]
+other = "QKE版本 %s 已下架，请重新选择 QKE 版本"
+
+[MasterMasterNodeNumNotMatch1]
+other = "集群至少需要%d个主节点，当前个数为%d"
+
+[MasterMasterNodeNumNotMatch2]
+other = "集群主节点个数应该为1或3, 当前个数为%d"
