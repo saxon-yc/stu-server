@@ -11,8 +11,8 @@ import (
 )
 
 func init() {
-	config.New("/pitrix/config/stu_apiserver.yaml", "/pitrix/config/data_base.yaml")
-	// config.New("config/stu_apiserver.yaml", "config/data_base.yaml")
+	// config.New("/pitrix/config/stu_apiserver.yaml", "/pitrix/config/data_base.yaml")
+	config.New("config/stu_apiserver.yaml", "config/data_base.yaml")
 }
 
 // @title 学生管理系统
@@ -36,7 +36,7 @@ func main() {
 	r.Run(viper.GetString("router.addr"))
 
 	// 测试国际化
-	locales.NewLocalizer("en")
+	locales.NewLocalizer(viper.GetString("i18n.language"))
 	test_text := locales.GetTranslatedMessage("MasterMasterNodeNumNotMatch2")
 	println(test_text)
 }

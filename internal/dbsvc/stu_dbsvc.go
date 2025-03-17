@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (b basicService) CreateStudent(params model.CreateStudentRequest) (err error) {
@@ -21,6 +22,26 @@ func (b basicService) CreateStudent(params model.CreateStudentRequest) (err erro
 		UpdateTime: time.Now(),
 	}).Error
 	return
+}
+func (b basicService) BatchInsertStudents(students []model.StudentDb) (totalInserted int64, err error) {
+	// 分批插入（每批100条）
+	batchSize := 100
+	for i := 0; i < len(students); i += batchSize {
+		end := i + batchSize
+		if end > len(students) {
+			end = len(students)
+		}
+
+		result := b.gdb.Clauses(clause.OnConflict{DoNothing: true}).
+			Create(students[i:end])
+
+		if result.Error != nil {
+			return totalInserted, result.Error
+		}
+		totalInserted += result.RowsAffected
+	}
+
+	return totalInserted, nil
 }
 
 func (b basicService) FindStudents(params model.QueryStudentRequest) (result model.QueryStudentResponse, err error) {

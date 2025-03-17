@@ -49,6 +49,10 @@ type QueryStudentRequest struct {
 	Tags       string `form:"tags"`
 }
 
+type ImportStudentsRequest struct {
+	Query   QueryStudentRequest `form:"query"`
+	Columns []string            `form:"columns"`
+}
 type ExportStudentRequest struct {
 	Query   QueryStudentRequest `form:"query"`
 	Columns []string            `form:"columns"`

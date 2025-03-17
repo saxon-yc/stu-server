@@ -14,6 +14,7 @@ type StuHandler interface {
 	ChangeStudentAPI() gin.HandlerFunc
 	QueryStudentsAPI() gin.HandlerFunc
 	ExportStudentsAPI() gin.HandlerFunc
+	ImportStudentsAPI() gin.HandlerFunc
 	DeleteStudentAPI() gin.HandlerFunc
 }
 

@@ -2,8 +2,10 @@ package excelizelib
 
 import (
 	"fmt"
+	"mime/multipart"
 	"net/url"
 	"strconv"
+	errorcode "student-server/pkg/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuri/excelize/v2"
@@ -42,7 +44,7 @@ func (l *lkExcelExport) ExportToWeb(params []map[string]string, data []map[strin
 	_, _ = ctx.Writer.Write(buffer.Bytes())
 }
 
-//设置首行
+// 设置首行
 func (l *lkExcelExport) writeTop(params []map[string]string) {
 	topStyle, _ := l.file.NewStyle(&excelize.Style{
 		Font: &excelize.Font{Bold: true},
@@ -67,7 +69,7 @@ func (l *lkExcelExport) writeTop(params []map[string]string) {
 	}
 }
 
-//写入数据
+// 写入数据
 func (l *lkExcelExport) writeData(params []map[string]string, data []map[string]interface{}) {
 	lineStyle, _ := l.file.NewStyle(&excelize.Style{
 		Alignment: &excelize.Alignment{
@@ -116,4 +118,22 @@ func createFile(sheetName string) *excelize.File {
 	// 设置工作簿的默认工作表
 	f.SetActiveSheet(index)
 	return f
+}
+
+func ReadExcel(file multipart.File) (rows *excelize.Rows, err error) {
+	f, err := excelize.OpenReader(file)
+	if err != nil {
+		return nil, errorcode.New(errorcode.INVALID_FILE_UNCORRENT_CODE, "ImportStudentsAPI", "Excel解析失败")
+	}
+
+	sheetName := f.GetSheetName(0)
+	if sheetName == "" {
+		return nil, errorcode.New(errorcode.INVALID_FILE_UNCORRENT_CODE, "ImportStudentsAPI", "未找到有效工作表")
+	}
+	fmt.Printf("sheetName: %v\n", sheetName)
+	rows, err = f.Rows(sheetName)
+	if err != nil {
+		return nil, errorcode.New(errorcode.INVALID_FILE_UNCORRENT_CODE, "ImportStudentsAPI", "工作表读取失败")
+	}
+	return rows, nil
 }

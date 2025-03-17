@@ -36,6 +36,7 @@ func SetRouterAPI(rg *gin.RouterGroup, basicService dbsvc.Servicer, handlerServi
 		rv2.POST("/student", stuAPI.CreateStudentAPI())
 		rv2.PUT("/student", stuAPI.ChangeStudentAPI())
 		rv2.POST("/student/export", stuAPI.ExportStudentsAPI())
+		rv2.POST("/student/import", stuAPI.ImportStudentsAPI())
 		rv2.DELETE("/student/:id", stuAPI.DeleteStudentAPI())
 	}
 

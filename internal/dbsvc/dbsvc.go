@@ -22,6 +22,7 @@ type Servicer interface {
 	FindOneStudentByID(id uint32) (result model.StudentDb)
 	FindStudents(params model.QueryStudentRequest) (result model.QueryStudentResponse, err error)
 	CreateStudent(params model.CreateStudentRequest) (err error)
+	BatchInsertStudents(students []model.StudentDb) (totalInserted int64, err error)
 	ChangeStudent(params model.ChangeStudentRequest) (err error)
 	DeleteStudent(id uint32) (err error)
 
